@@ -1,0 +1,29 @@
+{
+  "name": "dji-kmz-parser",
+  "version": "1.0.0",
+  "description": "Convert DJI KMZ to JS objects and back",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "dependencies": {
+    "fast-xml-builder": "^1.2.0",
+    "fast-xml-parser": "^5.8.0",
+    "jszip": "^3.10.1"
+  }
+}
