@@ -24,6 +24,6 @@
   "dependencies": {
     "fast-xml-builder": "^1.2.0",
     "fast-xml-parser": "^5.8.0",
-    "jszip": "^3.10.1"
+    "fflate": "^0.8.3"
   }
 }

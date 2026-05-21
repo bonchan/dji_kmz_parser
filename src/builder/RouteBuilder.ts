@@ -1,40 +1,32 @@
-// src/builder/RouteBuilder.ts
-import JSZip from 'jszip';
 import XMLBuilder from 'fast-xml-builder';
+import { zip } from 'fflate';
 import type { DjiKmzData } from '@/parser/DjiParser.js';
 
-
 export class RouteBuilder {
-  // We use the EXACT same configuration as the parser so the XML matches perfectly
   private builder = new XMLBuilder({
     ignoreAttributes: false,
     format: true,
-    suppressEmptyNode: true // Keeps the XML clean by removing empty tags
+    suppressEmptyNode: true,
   });
 
-  /**
-   * Converts the DjiKmzData object back into a universal KMZ zip binary
-   */
   async buildKmz(data: DjiKmzData): Promise<Uint8Array> {
-    // 1. Convert the JS Objects back to XML Strings
+    // 1. Convert JS objects back to XML strings
     const templateXml = this.builder.build(data.template);
     const waylinesXml = this.builder.build(data.waylines);
 
-    // 2. Create a new Zip archive
-    const zip = new JSZip();
+    // 2. Encode strings to Uint8Array
+    const encoder = new TextEncoder();
 
-    // 3. Recreate the specific folder structure DJI expects
-    const wpmzFolder = zip.folder("wpmz");
-    if (!wpmzFolder) {
-      throw new Error("Failed to create wpmz folder in zip");
-    }
-
-    wpmzFolder.file("template.kml", templateXml);
-    wpmzFolder.file("waylines.wpml", waylinesXml);
-
-    // 4. Generate the KMZ binary!
-    // Using 'uint8array' makes this output universally compatible (Node.js & Browser)
-    const kmzBinary = await zip.generateAsync({ type: "uint8array" });
+    // 3. Build the zip with fflate — keys are the file paths inside the zip
+    const kmzBinary = await new Promise<Uint8Array>((resolve, reject) => {
+      zip(
+        {
+          "wpmz/template.kml": encoder.encode(templateXml),
+          "wpmz/waylines.wpml": encoder.encode(waylinesXml),
+        },
+        (err, data) => err ? reject(err) : resolve(data)
+      );
+    });
 
     return kmzBinary;
   }

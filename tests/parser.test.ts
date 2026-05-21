@@ -32,7 +32,7 @@ describe('DjiParser', () => {
     expect(result.waylines.kml['@_xmlns:wpml']).toContain('http://www.dji.com/wpmz/');
   });
 
-  it.only('PLAYGROUND: Iterate through waypoints', async () => {
+  it('PLAYGROUND: Iterate through waypoints', async () => {
     const kmzPath = path.join(__dirname, 'fixtures', 'sample-route.kmz');
     const kmzBuffer = fs.readFileSync(kmzPath);
 
