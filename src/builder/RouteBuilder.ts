@@ -16,7 +16,7 @@ export class RouteBuilder {
 
     // 2. Encode strings to Uint8Array
     const encoder = new TextEncoder();
-
+    
     // 3. Build the zip with fflate — keys are the file paths inside the zip
     const kmzBinary = await new Promise<Uint8Array>((resolve, reject) => {
       zip(
